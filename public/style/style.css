@@ -1,0 +1,116 @@
+@import "@material/textfield/mdc-text-field";
+* {
+  margin: 0px;
+  padding: 0px;
+}
+/* HOME */
+@media only screen and (max-width: 430px) {
+  #logo {
+    width: 100%;
+  }
+}
+a {
+  text-decoration: none;
+  width: 150px;
+  display: inline-block;
+}
+a:hover {
+  text-decoration: none !important;
+}
+
+#logo {
+  max-width: 400px;
+}
+#homeBox1 {
+  background-color: var(--colorPrimary);
+  padding: 5px 0px 20px;
+}
+#homeBox2 {
+  background-color: var(--colorPrimaryDark);
+  padding: 5px 0px 20px;
+}
+#homeBox3 {
+  background-color: var(--colorAccent);
+  padding: 5px 2px 20px;
+}
+.row .col {
+  float: none !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.roundedBox {
+  border-radius: 0.5em;
+  margin: 10px;
+  padding: 10px;
+}
+
+.btnHome {
+  background-color: var(--colorPrimaryLight);
+  color: var(--colorSecondaryText);
+  font-size: 1.2rem;
+  border: 1px solid var(--colorPrimaryLight);
+  border-radius: 4em;
+}
+.btnHome:hover {
+  transition: 1s;
+  color: var(--colorAccent) !important;
+}
+/* CREATE EVENT */
+
+.MuiInput-underline:before {
+  border: none !important;
+}
+#Lugar {
+  border: none !important;
+}
+#Lugar:focus {
+  border: none !important;
+  box-shadow: none !important;
+}
+.inputMaterialize input:focus,
+textarea:focus {
+  border-bottom: 1px solid var(--colorPrimary) !important;
+  box-shadow: 0 1px 0 0 var(--colorPrimary) !important;
+}
+.inputMaterialize label,
+input,
+li > span {
+  color: var(--colorPrimaryText) !important;
+}
+.MuiInput-underline:before,
+.MuiInput-underline:after {
+  border-bottom: 1px solid var(--colorPrimary) !important;
+  box-shadow: 0 1px 0 0 var(--colorPrimary) !important;
+}
+
+.datepicker-date-display,
+.datepicker-table td.is-selected,
+.timepicker-digital-display {
+  background-color: var(--colorPrimary) !important;
+}
+.MuiFormLabel-root,
+.datepicker-calendar .is-today,
+.datepicker-calendar .select-wrapper > *,
+.datepicker-footer *,
+.dropdown-content *,
+.timepicker-footer * {
+  color: var(--colorPrimaryDark) !important;
+}
+.timepicker-svg > g > * {
+  fill: purple !important;
+  stroke: purple !important;
+}
+.timepicker-canvas-bg,
+.timepicker-canvas line {
+  fill: purple !important;
+}
+
+.row .btn {
+  background-color: var(--colorPrimary);
+}
+/*
+.row .btn:focus + .btn:hover {
+  background-color: var(--colorPrimaryDark) !important;
+}
+*/
