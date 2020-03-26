@@ -10,7 +10,7 @@ export class Login extends Component {
           <div className="col s12 m4">
             <div className="input-field">
               <label htmlFor="email">Email</label>
-              <input type="text" name="" id="email" />
+              <input type="email" name="" id="email" />
             </div>
           </div>
         </div>

@@ -13,7 +13,7 @@ export class PasswordReset extends Component {
             </p>
             <div className="input-field">
               <label htmlFor="email">Email</label>
-              <input type="text" name="" id="email" />
+              <input type="email" name="" id="email" />
             </div>
           </div>
           <div className="row">

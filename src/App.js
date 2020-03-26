@@ -7,6 +7,7 @@ import { Route, BrowserRouter } from "react-router-dom";
 import CreateEvent from "./components/CreateEvent";
 import UpdateEvent from "./components/UpdateEvent";
 import PasswordReset from "./components/PasswordReset";
+import SignUp from "./components/SignUp";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route exact path="/crearevento" component={CreateEvent} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/passwordreset" component={PasswordReset} />
+        <Route exact path="/signup" component={SignUp} />
         <Route exact path="/infoevento/:id" component={EventInfo} />
         <Route exact path="/updateevent" component={UpdateEvent} />
       </BrowserRouter>

@@ -114,3 +114,16 @@ li > span {
   background-color: var(--colorPrimaryDark) !important;
 }
 */
+
+/* SIGN UP */
+input[type="file"] {
+  display: none;
+}
+
+/* Linear loading change color */
+.progress {
+  background-color: var(--colorPrimaryLight) !important;
+}
+.progress .indeterminate {
+  background-color: var(--colorPrimaryDark) !important;
+}
