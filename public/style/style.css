@@ -127,3 +127,15 @@ input[type="file"] {
 .progress .indeterminate {
   background-color: var(--colorPrimaryDark) !important;
 }
+.colorPrincipal {
+  color: var(--colorPrimary);
+}
+.colorPrincipalOscuro {
+  color: var(--colorPrimaryDark);
+}
+.colorPrincipalClaro {
+  color: var(--colorPrimaryLight);
+}
+.colorAccent {
+  color: var(--colorAccent);
+}

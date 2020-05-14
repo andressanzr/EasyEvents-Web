@@ -2,6 +2,15 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 export class Home extends Component {
+  state = {
+    idEvento: "",
+  };
+  handleInputChange = (e) => {
+    this.setState({
+      ...this.state,
+      [e.target.name]: e.target.value,
+    });
+  };
   render() {
     return (
       <>
@@ -30,14 +39,15 @@ export class Home extends Component {
                 <input
                   type="number"
                   name="idEvento"
+                  onChange={this.handleInputChange}
                   id=""
                   style={{
                     width: "20%",
-                    borderColor: "var(--colorPrimaryDark)"
+                    borderColor: "var(--colorPrimaryDark)",
                   }}
                 />
               </p>
-              <Link to="/infoevento">
+              <Link to={"/infoevento/" + this.state.idEvento}>
                 <p className="btnHome">Ver Evento</p>
               </Link>
             </div>

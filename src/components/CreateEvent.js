@@ -7,84 +7,47 @@ import "axios";
 import MapGoogle from "./MapGoogle";
 import Axios from "axios";
 
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { TextField } from "@material-ui/core";
-import AutoComplete from "@material-ui/lab/Autocomplete";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 export class CreateEvent extends Component {
   state = {
-    matchingPlaces: [],
     currentPlaceMap: "",
     name: "",
     type: "cumpleanos",
     date: "",
     time: "",
     emailInvitados: [],
-    message: ""
+    message: "",
+    hostName: "",
   };
   componentDidMount = () => {
     M.Datepicker.init(document.querySelector(".datepicker"), {
       minDate: new Date(),
-      onSelect: newDate => {
+      onSelect: (newDate) => {
         this.setState({
           ...this.state,
-          date: newDate
+          date: newDate,
         });
-      }
+      },
     });
     M.Timepicker.init(document.querySelector(".timepicker"), {
       onSelect: (hours, minutes) => {
         this.setState({
           ...this.state,
-          time: new Date(0, 0, 0, hours, minutes, 0, 0)
+          time: new Date(0, 0, 0, hours, minutes, 0, 0),
         });
-      }
+      },
     });
     M.FormSelect.init(document.querySelector("select"), {});
     M.Autocomplete.init(document.querySelector("#lugar"), {});
   };
-  handlePlaceSearch = e => {
-    if (e.target.value.length > 3) {
-      var url =
-        "https://api.locationiq.com/v1/autocomplete.php?key=e08e62fc6c9381&q=" +
-        e.target.value;
-      Axios.get(url)
-        .then(data => {
-          var placesNames = [];
-          if (data) {
-            data.data.map(place => {
-              return placesNames.push(place.display_name);
-            });
-            this.setState({
-              ...this.state,
-              matchingPlaces: placesNames
-            });
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    } else {
-      this.setState({
-        ...this.state,
-        matchingPlaces: []
-      });
-    }
-  };
-  handlePlaceEntered = (e, val) => {
-    console.log(val);
+  handleInputChange = (e) => {
     this.setState({
       ...this.state,
-      currentPlaceMap: val
+      [e.target.name]: e.target.value,
     });
   };
-  handleInputChange = e => {
-    this.setState({
-      ...this.state,
-      [e.target.name]: e.target.value
-    });
-  };
-  addEmailToState = email => {
+  addEmailToState = (email) => {
     var myEmailArray;
     if (this.state.emailInvitados) {
       myEmailArray = this.state.emailInvitados;
@@ -94,7 +57,7 @@ export class CreateEvent extends Component {
     myEmailArray.push(email);
     this.setState({
       ...this.state,
-      emailInvitados: myEmailArray
+      emailInvitados: myEmailArray,
     });
   };
   sendData = () => {
@@ -103,6 +66,7 @@ export class CreateEvent extends Component {
     var date = this.state.date;
     var time = this.state.time;
     var message = this.state.message;
+    var hostName = this.state.hostName;
     var place = this.state.currentPlaceMap;
     var emailInvitees = this.state.emailInvitados;
 
@@ -112,6 +76,7 @@ export class CreateEvent extends Component {
       date !== "" &&
       time !== "" &&
       message !== "" &&
+      hostName !== "" &&
       place !== ""
     ) {
       Axios.post("http://localhost:7777/event/save", {
@@ -120,9 +85,24 @@ export class CreateEvent extends Component {
         date,
         time,
         message,
+        hostName,
         place,
-        emailInvitees
-      });
+        emailInvitees,
+      })
+        .then((res) => {
+          if (res.data.type === "error") {
+            this.setState({
+              ...this.state,
+              responseMsg: res.data.msg,
+            });
+          } else if (res.data.type === "success") {
+            var idCode = res.data.msg;
+            this.props.history.push("/infoevento/" + idCode);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       console.log("empty");
     }
@@ -133,12 +113,13 @@ export class CreateEvent extends Component {
   }
   render() {
     const theme = createMuiTheme({
-      color: "red"
+      color: "red",
     });
     return (
       <div className="container" id="createEventContainer">
         <h1 style={{ fontSize: "4rem" }}>Crear evento</h1>
         <p>Introduce los datos del evento</p>
+        <p>{this.state.responseMsg}</p>
 
         <div className="row">
           <label>Tipo:</label>
@@ -148,6 +129,7 @@ export class CreateEvent extends Component {
               <option value="boda">Boda</option>
               <option value="despedidadSoltero">Despedida de soltero</option>
               <option value="babyShower">Baby Shower</option>
+              <option value="fiesta">Fiesta</option>
             </select>
           </div>
         </div>
@@ -158,6 +140,23 @@ export class CreateEvent extends Component {
               type="text"
               name="name"
               id="nombre"
+              className="validate"
+              minLength="3"
+              onChange={this.handleInputChange}
+            />
+            <span
+              className="helper-text"
+              data-error="Longitud mínima 3 carácteres"
+            ></span>
+          </div>
+        </div>
+        <div className="row">
+          <div className="input-field s12 inputMaterialize">
+            <label htmlFor="nombre">Nombre del Anfitrión</label>
+            <input
+              type="text"
+              name="hostName"
+              id="hostName"
               className="validate"
               minLength="3"
               onChange={this.handleInputChange}
@@ -182,22 +181,14 @@ export class CreateEvent extends Component {
         </div>
         <div className="row">
           <div className="s12">
-            <ThemeProvider theme={theme}>
-              <AutoComplete
-                id="Lugar"
-                options={this.state.matchingPlaces}
-                onChange={this.handlePlaceEntered}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    onChange={this.handlePlaceSearch}
-                    label="Lugar"
-                    margin="normal"
-                    InputProps={{ ...params.InputProps, type: "search" }}
-                  />
-                )}
+            <div className="inputMaterialize input-field s12">
+              <textarea
+                name="currentPlaceMap"
+                className="materialize-textarea"
+                onChange={this.handleInputChange}
               />
-            </ThemeProvider>
+              <label htmlFor="textarea1">Lugar</label>
+            </div>
           </div>
         </div>
         <div className="row">
