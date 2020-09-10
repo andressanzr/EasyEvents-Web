@@ -6,7 +6,7 @@ import M from "materialize-css";
 import "axios";
 import MapGoogle from "./MapGoogle";
 import Axios from "axios";
-
+import FooterEasy from "./FooterEasy";
 import { createMuiTheme } from "@material-ui/core/styles";
 
 export class CreateEvent extends Component {
@@ -216,6 +216,7 @@ export class CreateEvent extends Component {
           </button>
         </div>
         <MapGoogle query={this.state.currentPlaceMap || "madrid"} />
+        <FooterEasy />
       </div>
     );
   }

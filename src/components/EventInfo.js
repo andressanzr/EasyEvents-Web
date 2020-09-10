@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Axios from "axios";
 import MapGoogle from "./MapGoogle";
+import { Link } from "react-router-dom";
+import FooterEasy from "./FooterEasy";
 
 export class EventInfo extends Component {
   state = {
@@ -13,6 +15,8 @@ export class EventInfo extends Component {
     place: "",
     hostName: "",
     publicIdCode: "",
+    serverWorking: true,
+    eventFound: false,
   };
   colores = {
     colorPrimary: "#ff9800",
@@ -25,7 +29,6 @@ export class EventInfo extends Component {
     colorDivider: "#bdbdbd",
   };
   componentDidMount = () => {
-    console.log(this.props.match.params.id);
     var publicId = this.props.match.params.id;
     Axios.get("http://localhost:7777/event/" + publicId)
       .then((res) => {
@@ -54,6 +57,13 @@ export class EventInfo extends Component {
             place: eventData.place,
             publicIdCode: eventData.publicIdCode,
             message: eventData.message,
+            eventFound: true,
+            serverWorking: false,
+          });
+        } else if (res.data.type == "error") {
+          this.setState({
+            eventFound: false,
+            serverWorking: false,
           });
         }
       })
@@ -65,11 +75,34 @@ export class EventInfo extends Component {
     return (
       <>
         <div className="container" id="createEventContainer">
-          {this.state.name ? (
+          {this.state.serverWorking == false &&
+          this.state.eventFound == false ? (
+            <div className="container center-align">
+              <h3>
+                El evento con el id: {this.props.match.params.id} no existe
+              </h3>
+              <h6>
+                <Link to="/">Home</Link>
+              </h6>
+              <Link to="/" style={{ width: "100%" }}>
+                <img src="/fotos/logo.png" id="logo" alt="logo" />
+              </Link>
+            </div>
+          ) : (
+            ""
+          )}
+          {this.state.serverWorking ? (
+            <div className="progress" style={{ marginTop: "30px" }}>
+              <div className="indeterminate"></div>
+            </div>
+          ) : this.state.eventFound ? (
             <div>
               <h1 style={{ color: this.colores.colorPrimary }}>
                 {this.state.name}
               </h1>
+              <h5 style={{ color: this.colores.colorAccent }}>
+                CódigoIDPúblico: {this.props.match.params.id}
+              </h5>
               <h5 style={{ color: this.colores.colorPrimaryDark }}>
                 {this.state.type}
               </h5>
@@ -77,29 +110,32 @@ export class EventInfo extends Component {
                 Anfitrión: {this.state.hostName}
               </h5>
               <h5>Lugar: {this.state.place}</h5>
-              <p>Fecha: {new Date(this.state.date).toLocaleString()}</p>
+              <p
+                style={{
+                  float: "right",
+                }}
+              >
+                <b>
+                  Fecha y hora: {new Date(this.state.date).toLocaleString()}
+                </b>
+              </p>
+              <h6 style={{ color: this.colores.colorPrimary }}>Mensaje:</h6>{" "}
               <p>
+                <em>"{this.state.message}"</em>
+              </p>
+              <MapGoogle query={this.state.place} />
+              <p
+                style={{
+                  float: "right",
+                }}
+              >
                 Fecha creado:{" "}
                 {new Date(this.state.dateCreated).toLocaleString()}
               </p>
-              <p>Mensaje: {this.state.message}</p>
-              <MapGoogle query={this.state.place} />
-              <div className="container center-align">
-                <p>
-                  <b style={{ color: this.colores.colorPrimary }}>
-                    Evento creado con EasyEvents
-                  </b>
-                </p>
-                <img src="/fotos/logo.png" id="logo" alt="logo" />
-              </div>
+              <FooterEasy />
             </div>
           ) : (
-            <div className="container center-align">
-              <h3>
-                El evento con el id: {this.props.match.params.id} no existe
-              </h3>
-              <img src="/fotos/logo.png" id="logo" alt="logo" />
-            </div>
+            ""
           )}
         </div>
       </>
